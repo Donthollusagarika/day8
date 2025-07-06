@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+      background-color: #f8f8f8;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+    }
+
+    .form-container {
+      padding: 20px;
+      border: 1px solid #aaa;
+      background-color: white;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 8px 20px;
+      background-color: pink;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .table-container {
+      border: 1px solid #000;
+      padding: 10px;
+      background-color: white;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 600px;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: skyblue;
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background-color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>Enter Student details</h2>
+      <form id="studentForm">
+        <input type="text" id="studentname" placeholder="Enter the student Name" required><br>
+        <input type="text" id="college" placeholder="Enter the collegename " required><br>
+        <input type="text" id="course" placeholder="Enter the course Name" required><br>
+        <input type="number" id="age" placeholder="Enter Age" required><br>
+        <input type="text" id="address" placeholder="Enter the Address of a Faculty" required><br>
+        <button type="submit" id="submitBtn">Submit</button>
+      </form>
+    </div>
+
+    <div class="table-container">
+      <table id="studentTable">
+        <tr>
+          <th>studentName</th>
+          <th>colleget</th>
+          <th>course</th>
+          <th>Age</th>
+          <th>Place</th>
+          <th>Action</th>
+        </tr>
+        <!--student  Rows  will go here -->
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('studentForm');
+    const table = document.getElementById('studentTable');
+    const submitBtn = document.getElementById('submitBtn');
+
+    let editRow = null;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const studentname = document.getElementById('studentname').value;
+      const collegename = document.getElementById('college').value;
+      const course = document.getElementById('course').value;
+      const age = document.getElementById('age').value;
+      const address = document.getElementById('address').value;
+
+      if (editRow) {
+        // Update existing studentrow
+        editRow.cells[0].innerText = studentname;
+        editRow.cells[1].innerText = collegename;
+        editRow.cells[2].innerText = course;
+        editRow.cells[3].innerText = age;
+        editRow.cells[4].innerText = address;
+        submitBtn.textContent = 'Submit';
+        editRow = null;
+      } else {
+        // Create new row
+        const newRow = table.insertRow();
+        newRow.innerHTML = `
+          <td>${name}</td>
+          <td>${collge}</td>
+          <td>${course}</td>
+          <td>${age}</td>
+          <td>${address}</td>
+          <td>
+              <button onclick="deleteRow(This)">Delete</button>
+          </td>
+        `;
+
+        // Add click event to studentrow (except last cell)
+        newRow.addEventListener('click', function (e) {
+          if (e.target.tagName !== 'BUTTON') {
+            loadRowIntoForm(newRow);
+          }
+        });
+      }
+
+      form.reset();
+    });
+
+    function deleteRow(btn) {
+      const row = btn.parentNode.parentNode;
+      if (editRow === row) {
+        form.reset();
+        submitBtn.textContent = 'Submit';
+        editRow = null;
+      }
+      row.remove();
+    }
+
+    function loadRowIntoForm(row) {
+      editRow = row;
+      document.getElementById('name').value = row.cells[0].innerText;
+      document.getElementById('department').value = row.cells[1].innerText;
+      document.getElementById('subject').value = row.cells[2].innerText;
+      document.getElementById('age').value = row.cells[3].innerText;
+      document.getElementById('address').value = row.cells[4].innerText;
+      submitBtn.textContent = 'Update';
+    }
+  </script>
+</body>
+</html>
